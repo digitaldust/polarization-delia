@@ -14,7 +14,7 @@ public class ClassManager extends DefaultClassManager {
      */
     @Override
   public void load(PrimitiveManager primitiveManager) {
-    primitiveManager.addPrimitive("first-n-integers", new IntegerList());
-    primitiveManager.addPrimitive("my-list", new MyList());
+    primitiveManager.addPrimitive("create-population", new CreatePopulation());    
   }
+    
 }
