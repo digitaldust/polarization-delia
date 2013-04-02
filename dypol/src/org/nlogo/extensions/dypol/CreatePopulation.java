@@ -13,6 +13,7 @@ import org.nlogo.api.LogoException;
 class CreatePopulation extends DefaultCommand {
 
     public CreatePopulation() {
+        // una prova
     }
 
     @Override
