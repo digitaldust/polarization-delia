@@ -2,14 +2,13 @@ package org.nlogo.extensions.dypol;
 
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import java.util.HashMap;
-import java.util.Random;
-import org.nlogo.agent.AgentSet;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultCommand;
 import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.agent.World;
+import org.nlogo.api.AgentException;
 import org.nlogo.api.Link;
 import org.nlogo.api.Syntax;
 import org.nlogo.api.Turtle;
@@ -59,8 +58,13 @@ class CreatePopulation extends DefaultCommand {
         }
         // retrieve current turtle
         Turtle turtle = argmnts[0].getTurtle();
-        // add values to variables
-        
+        try {
+            // add values to variables
+            turtle.setVariable(Dypol.variables.get("SHAPE"), "person");
+            turtle.setVariable(Dypol.variables.get("COLOR"), "blue");
+        } catch (AgentException ex) {
+            throw new ExtensionException("Failed to set turtle shape.");
+        }
         // add node to the network
         Dypol.g.addVertex(turtle);
         
