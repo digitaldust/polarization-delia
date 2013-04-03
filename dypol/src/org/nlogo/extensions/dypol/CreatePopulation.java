@@ -59,9 +59,10 @@ class CreatePopulation extends DefaultCommand {
         // retrieve current turtle
         Turtle turtle = (Turtle)argmnts[0].getTurtle();
         try {
+            System.out.println("turtle " + turtle.getVariable(Dypol.variables.get("WHO")));
             // add values to variables
-            turtle.setVariable(Dypol.variables.get("SHAPE"), "person");
-            turtle.setVariable(Dypol.variables.get("COLOR"), "blue");
+            //turtle.setVariable(Dypol.variables.get("SHAPE"), "PERSON");
+            turtle.setVariable(Dypol.variables.get("COLOR"), "BLUE");
         } catch (AgentException ex) {
             throw new ExtensionException("Failed to set turtle shape.");
         }
@@ -78,6 +79,6 @@ class CreatePopulation extends DefaultCommand {
 //            
 //            
 //        }
-        throw new ExtensionException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new ExtensionException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
