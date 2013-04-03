@@ -57,7 +57,7 @@ class CreatePopulation extends DefaultCommand {
 
         }
         // retrieve current turtle
-        Turtle turtle = argmnts[0].getTurtle();
+        Turtle turtle = (Turtle)argmnts[0].getTurtle();
         try {
             // add values to variables
             turtle.setVariable(Dypol.variables.get("SHAPE"), "person");
