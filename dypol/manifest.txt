@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Extension-Name: dypol
-Class-Manager: org.nlogo.extensions.ClassManager
+Class-Manager: org.nlogo.extensions.dypol
 NetLogo-Extension-API-Version: 5.0
