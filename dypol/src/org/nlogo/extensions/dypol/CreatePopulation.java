@@ -111,18 +111,6 @@ class CreatePopulation extends DefaultCommand {
         node.setIssuesChosen(world.ticks(), issuesChosen);
         // add node to the network
         Dypol.g.addVertex(node);
-        System.out.println("net size " + Dypol.g.getVertexCount());
         
-//        AgentSet.Iterator turtleIterator = world.turtles().iterator();
-//        while (turtleIterator.hasNext()) {
-//            // retrieve this turtle
-//            Turtle turtle = (Turtle) turtleIterator.next();
-//            
-//            
-//            
-//            
-//            
-//        }
-//        throw new ExtensionException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
