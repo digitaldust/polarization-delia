@@ -8,34 +8,33 @@ import java.util.HashMap;
 
 /**
  *
- * @author digitaldust
+ * @author Simone Gabbriellini
  */
 public class Node {
-    private double who;
+    private int who;
     private double xcor;
     private double ycor;
+    
     private HashMap<Double, Double[]> contactedPeople = new HashMap<Double, Double[]>();
-    private HashMap<Double, Double[]> socDistanceProb = new HashMap<Double, Double[]>();
+
     private HashMap<Double, Double[]> issuesChosen = new HashMap<Double, Double[]>();
-    private HashMap<Double, Double[]> euclideanDistance = new HashMap<Double, Double[]>();
-    private HashMap<Double, Double[]> normEuclideanDistance = new HashMap<Double, Double[]>();
     private HashMap<Double, Double[]> issuesInterest = new HashMap<Double, Double[]>();
     
-
-//;    let my-issues n-values issues-number [random-normal 0 33.3]
-//;    table:put issue-interest ticks bound-it my-issues
+    private HashMap<Double, Double[]> euclideanDistance = new HashMap<Double, Double[]>();
+    private HashMap<Double, Double[]> normEuclideanDistance = new HashMap<Double, Double[]>();
+    private HashMap<Double, Double[]> socDistanceProb = new HashMap<Double, Double[]>();
 
     /**
      * @return the who
      */
-    public double getWho() {
+    public int getWho() {
         return who;
     }
 
     /**
      * @param who the who to set
      */
-    public void setWho(double who) {
+    public void setWho(int who) {
         this.who = who;
     }
 

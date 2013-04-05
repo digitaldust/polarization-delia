@@ -1,6 +1,7 @@
 package org.nlogo.extensions.dypol;
 
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import flanagan.math.PsRandom;
 import java.util.HashMap;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
@@ -17,26 +18,30 @@ import org.nlogo.api.Turtle;
  *
  * @author Simone Gabbriellini
  */
-class CreatePopulation extends DefaultCommand {
+class Initialize extends DefaultCommand {
 
     // syntax to get the agent
     @Override
     public Syntax getSyntax() {
-        return Syntax.commandSyntax(new int[]{Syntax.TurtleType(), Syntax.NumberType()});
+        return Syntax.commandSyntax(new int[]{Syntax.TurtleType()});
     }
 
     @Override
     public void perform(Argument[] argmnts, Context cntxt) throws ExtensionException, LogoException {
 
+        // retrieve world
+        World world = (World) cntxt.getAgent().world();
+        // retrieve ticks now
+        Double ticks = world.ticks();
         // initialize the network if it does not exist yet
         if (Dypol.g == null) {
             Dypol.g = new UndirectedSparseGraph<Node, Link>();
         }
-        // retrieve world
-        World world = (World) cntxt.getAgent().world();
+        if (Dypol.generator == null) {
+            Dypol.generator = new PsRandom(Dypol.seed);
+        }
         // initialize hashmap to hold variables index
         if (Dypol.variables == null) {
-            
             // retrieve turtle who number
             int who = world.turtlesOwnIndexOf("WHO");
             // set xcor
@@ -58,40 +63,38 @@ class CreatePopulation extends DefaultCommand {
         }
         // retrieve current turtle
         Turtle turtle = argmnts[0].getTurtle();
-        // retrieve the issues number
-        double issuesNumber = argmnts[1].getDoubleValue();
+        //
         try {
-            System.out.println("turtle " + turtle.getVariable(Dypol.variables.get("WHO")));
             // set turtle's shape
             turtle.setVariable(Dypol.variables.get("SHAPE"), "PERSON");
             // set turtle's color
             turtle.setVariable(Dypol.variables.get("COLOR"), 105.0);
             // set turtle's xcor
-            turtle.setVariable(Dypol.variables.get("XCOR"), Dypol.distribution.nextDouble(0.0, 32.0));
+            turtle.setVariable(Dypol.variables.get("XCOR"), Dypol.generator.nextDouble(0.0, 32.0));
             // set turtle's ycor
-            turtle.setVariable(Dypol.variables.get("YCOR"), Dypol.distribution.nextDouble(0.0, 32.0));
+            turtle.setVariable(Dypol.variables.get("YCOR"), Dypol.generator.nextDouble(0.0, 32.0));
             
         } catch (AgentException ex) {
             // throw related error
             throw new ExtensionException(ex);
         }
         Node node = new Node();
-        node.setWho((Double)turtle.getVariable(Dypol.variables.get("WHO")));
+        node.setWho((int)Math.floor((Double)turtle.getVariable(Dypol.variables.get("WHO"))));
         node.setXcor((Double)turtle.getVariable(Dypol.variables.get("XCOR")));
         node.setYcor((Double)turtle.getVariable(Dypol.variables.get("YCOR")));
-        Double[] turtles = new Double[500];
-        for(int i=0;i<500;i++){
+        Double[] turtles = new Double[Dypol.size];
+        for(int i=0;i<Dypol.size;i++){
             turtles[i] = 0.0;
         }
-        node.setContactedPeople(world.ticks(), turtles);
-        node.setSocDistanceProb(world.ticks(), turtles);
-        node.setEuclideanDistance(world.ticks(), turtles);
-        node.setNormEuclideanDistance(world.ticks(), turtles);
+        node.setContactedPeople(ticks, turtles.clone());
+        node.setSocDistanceProb(ticks, turtles.clone());
+        node.setEuclideanDistance(ticks, turtles.clone());
+        node.setNormEuclideanDistance(ticks, turtles.clone());
         // initialize issue interest
-        Double[] issuesInterest = new Double[(int)issuesNumber];
-        Double[] issuesChosen = new Double[(int)issuesNumber];
-        for(int i=0;i<issuesNumber;i++){
-            double nextNormal = Dypol.distribution.nextNormal(0, 33.3);
+        Double[] issuesInterest = new Double[Dypol.issues];
+        Double[] issuesChosen = new Double[Dypol.issues];
+        for(int i=0;i<Dypol.issues;i++){
+            double nextNormal = Dypol.generator.nextNormal(0, 33.3);
             if(nextNormal > 100.0){
                 nextNormal = 100.0;
             } else if (nextNormal < -100.0){
@@ -107,10 +110,11 @@ class CreatePopulation extends DefaultCommand {
             // bound the value
             issuesChosen[i] = 0.0;
         }
-        node.setIssuesInterest(world.ticks(), issuesInterest);
-        node.setIssuesChosen(world.ticks(), issuesChosen);
+        node.setIssuesInterest(ticks, issuesInterest);
+        node.setIssuesChosen(ticks, issuesChosen);
         // add node to the network
         Dypol.g.addVertex(node);
+        
         
     }
 }

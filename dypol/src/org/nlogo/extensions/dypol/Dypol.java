@@ -13,9 +13,13 @@ import org.nlogo.api.PrimitiveManager;
  */
 public class Dypol extends DefaultClassManager {
     
-    public static HashMap<String, Integer> variables = null;
-    public static UndirectedSparseGraph<Node, Link> g = null;
-    public static PsRandom distribution = new PsRandom();
+    public static HashMap<String, Integer> variables;
+    public static UndirectedSparseGraph<Node, Link> g;
+    public static PsRandom generator;
+    public static double infl;
+    public static int issues;
+    public static int seed;
+    public static int size;
     /**
      *
      * @param primitiveManager
@@ -23,7 +27,10 @@ public class Dypol extends DefaultClassManager {
     @Override
   public void load(PrimitiveManager primitiveManager) {
     primitiveManager.addPrimitive("clear-all", new ClearAll());    
-    primitiveManager.addPrimitive("initialize", new CreatePopulation());    
+    primitiveManager.addPrimitive("initialize-agent", new Initialize());    
+    primitiveManager.addPrimitive("initialize-distances", new InitializeDistances());    
+    primitiveManager.addPrimitive("influence", new Influence());    
+    primitiveManager.addPrimitive("stats", new Stats());    
   }
     
 }
