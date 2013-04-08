@@ -14,9 +14,10 @@ public class Node {
     private int who;
     private double xcor;
     private double ycor;
-    
+    private double interactions;
     private HashMap<Double, Double[]> contactedPeople = new HashMap<Double, Double[]>();
-
+    private Double[] allTimeContactedPeople = new Double[Dypol.size];
+    
     private HashMap<Double, Double[]> issuesChosen = new HashMap<Double, Double[]>();
     private HashMap<Double, Double[]> issuesInterest = new HashMap<Double, Double[]>();
     
@@ -148,6 +149,42 @@ public class Node {
      */
     public void setIssuesInterest(Double ticks, Double[] turtles) {
         this.issuesInterest.put(ticks, turtles);
+    }
+
+    /**
+     * @return the interactions
+     */
+    public double getInteractions() {
+        return interactions;
+    }
+
+    /**
+     * @param interactions the interactions to set
+     */
+    public void setInteractions() {
+        this.interactions++;
+    }
+    
+    public void setInitializeInteractions(){
+        this.interactions = 0;
+    }
+
+    /**
+     * @return the allTimeContactedPeople
+     */
+    public Double[] getAllTimeContactedPeople() {
+        return allTimeContactedPeople;
+    }
+
+    /**
+     * @param allTimeContactedPeople the allTimeContactedPeople to set
+     */
+    public void setAllTimeContactedPeople(int pos) {
+        this.allTimeContactedPeople[pos]++;
+    }
+
+    public void setInitializeAllTimeContactedPeople(Double[] turtles) {
+        this.allTimeContactedPeople = turtles;
     }
     
     

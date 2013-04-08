@@ -3,6 +3,7 @@ package org.nlogo.extensions.dypol;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import flanagan.math.PsRandom;
 import java.util.HashMap;
+import java.util.Random;
 import org.nlogo.api.Argument;
 import org.nlogo.api.Context;
 import org.nlogo.api.DefaultCommand;
@@ -10,7 +11,6 @@ import org.nlogo.api.ExtensionException;
 import org.nlogo.api.LogoException;
 import org.nlogo.agent.World;
 import org.nlogo.api.AgentException;
-import org.nlogo.api.Link;
 import org.nlogo.api.Syntax;
 import org.nlogo.api.Turtle;
 
@@ -35,10 +35,20 @@ class Initialize extends DefaultCommand {
         Double ticks = world.ticks();
         // initialize the network if it does not exist yet
         if (Dypol.g == null) {
-            Dypol.g = new UndirectedSparseGraph<Node, Link>();
+            Dypol.g = new UndirectedSparseGraph<Node, LinkNodes>();
         }
         if (Dypol.generator == null) {
-            Dypol.generator = new PsRandom(Dypol.seed);
+            if(Dypol.seed!=1){
+                Dypol.generator = new PsRandom(Dypol.seed);
+            } else {
+                Dypol.generator = new PsRandom(world.mainRNG.nextLong());
+            }
+        }
+        if(Dypol.mostPopularIssue==null){
+            Dypol.mostPopularIssue = new int[Dypol.issues];
+            for(int i=0;i<Dypol.issues;i++){
+                Dypol.mostPopularIssue[i] = 0;
+            }
         }
         // initialize hashmap to hold variables index
         if (Dypol.variables == null) {
@@ -63,11 +73,10 @@ class Initialize extends DefaultCommand {
         }
         // retrieve current turtle
         Turtle turtle = argmnts[0].getTurtle();
-        //
         try {
             // set turtle's shape
             turtle.setVariable(Dypol.variables.get("SHAPE"), "PERSON");
-            // set turtle's color
+            // set turtle's color according to sign of most popular issue
             turtle.setVariable(Dypol.variables.get("COLOR"), 105.0);
             // set turtle's xcor
             turtle.setVariable(Dypol.variables.get("XCOR"), Dypol.generator.nextDouble(0.0, 32.0));
@@ -79,6 +88,7 @@ class Initialize extends DefaultCommand {
             throw new ExtensionException(ex);
         }
         Node node = new Node();
+        node.setInitializeInteractions();
         node.setWho((int)Math.floor((Double)turtle.getVariable(Dypol.variables.get("WHO"))));
         node.setXcor((Double)turtle.getVariable(Dypol.variables.get("XCOR")));
         node.setYcor((Double)turtle.getVariable(Dypol.variables.get("YCOR")));
@@ -87,6 +97,7 @@ class Initialize extends DefaultCommand {
             turtles[i] = 0.0;
         }
         node.setContactedPeople(ticks, turtles.clone());
+        node.setInitializeAllTimeContactedPeople(turtles);
         node.setSocDistanceProb(ticks, turtles.clone());
         node.setEuclideanDistance(ticks, turtles.clone());
         node.setNormEuclideanDistance(ticks, turtles.clone());
@@ -114,7 +125,6 @@ class Initialize extends DefaultCommand {
         node.setIssuesChosen(ticks, issuesChosen);
         // add node to the network
         Dypol.g.addVertex(node);
-        
-        
+
     }
 }
