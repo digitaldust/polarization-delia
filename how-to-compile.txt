@@ -1,0 +1,5 @@
+How to compile DyPol:
+
+javac -classpath "lib/*::/Applications/NetLogo 5.0.4/NetLogo.jar" -d build/classes src/org/nlogo/extensions/dypol/Initialize.java src/org/nlogo/extensions/dypol/Dypol.java src/org/nlogo/extensions/dypol/Node.java src/org/nlogo/extensions/dypol/ClearAll.java src/org/nlogo/extensions/dypol/Influence.java src/org/nlogo/extensions/dypol/InitializeDistances.java src/org/nlogo/extensions/dypol/Stats.java src/org/nlogo/extensions/dypol/LinkNodes.java -Xlint:unchecked -source 1.6 -target 1.6
+
+jar cvfm /Users/digitaldust/Dropbox/Delia\ -\ Polarization/dypol/dypol.jar manifest.txt -C build/classes .
